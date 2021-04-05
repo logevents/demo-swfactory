@@ -1,0 +1,20 @@
+plugins {
+    // Apply the groovy plugin to add support for Groovy
+    id 'groovy'
+    id 'idea'
+    id 'application'
+}
+
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.15'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    compile project(':model')
+
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    jcenter()
+}
