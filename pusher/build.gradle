@@ -6,11 +6,12 @@ plugins {
 
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.15'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
     compile project(':model')
+    implementation 'org.codehaus.groovy:groovy-all:2.4.15'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.0.3'
 
-    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    testImplementation 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 
 // In this section you declare where to find the dependencies of your project
