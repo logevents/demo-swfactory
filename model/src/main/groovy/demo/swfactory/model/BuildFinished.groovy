@@ -1,8 +1,7 @@
 package demo.swfactory.model
 
-class BuildFinished {
+class BuildFinished extends BaseEntity {
     final String _type = "BuildFinished"
-    String trackingId
     Date finished
 
     @Override

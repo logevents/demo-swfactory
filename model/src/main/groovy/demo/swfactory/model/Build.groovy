@@ -1,15 +1,17 @@
 package demo.swfactory.model
 
-class Build {
+class Build extends BaseEntity {
     enum State {STARTED, FINISHED}
     final String _type = "Build"
-    String trackingId
     String project
     Date started
 
+    String key() {
+        return trackingId
+    }
 
     @Override
-    public String toString() {
+    String toString() {
         return "Build{" +
                 "_type='" + _type + '\'' +
                 ", trackingId='" + trackingId + '\'' +

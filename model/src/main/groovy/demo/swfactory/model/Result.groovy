@@ -1,17 +1,23 @@
 package demo.swfactory.model
 
-class Result {
+class Result extends BaseEntity {
     final String _type = "Result"
-    String trackingId
     String component
     String result
     Date started
     Date finished
     Set<ResultProperty> properties
 
+    String key() {
+        trackingId + '-' + component
+    }
+
+    String buildKey() {
+        trackingId
+    }
 
     @Override
-    public String toString() {
+    String toString() {
         return "Result{" +
                 "_type='" + _type + '\'' +
                 ", trackingId='" + trackingId + '\'' +
@@ -22,4 +28,5 @@ class Result {
                 ", properties=" + properties +
                 '}';
     }
+
 }
