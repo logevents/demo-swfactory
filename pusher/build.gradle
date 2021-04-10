@@ -10,7 +10,8 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:2.4.15'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.0.3'
-
+    implementation 'org.slf4j:slf4j-api:1.7.28'
+    implementation 'org.slf4j:slf4j-simple:1.7.28'
     testImplementation 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 

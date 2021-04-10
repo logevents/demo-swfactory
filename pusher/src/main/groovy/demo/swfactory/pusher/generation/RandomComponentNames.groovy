@@ -1,8 +1,13 @@
 package demo.swfactory.pusher.generation
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.util.concurrent.ThreadLocalRandom
 
 class RandomComponentNames {
+    private static Logger LOG = LoggerFactory.getLogger(RandomComponentNames.class)
+
     static final Set<String> words = [
             "Factory", "Bean", "Wrapper", "Visitor", "Model", "Singleton",
             "Method", "Configuration", "Exception", "Error", "Property", "Value",
@@ -49,7 +54,7 @@ class RandomComponentNames {
             }
             word += curWord;
         }
-        System.out.println("Generated: "+word)
+        LOG.info("Generated: {}", word)
         return word;
     }
 
