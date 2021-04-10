@@ -8,8 +8,6 @@ import demo.swfactory.model.Result
 class BuildGeneration {
 
     static Build generateBuild(String trackingId) {
-
-
         new Build(trackingId: trackingId,
                 project: "EasyBuild",
                 started: new Date(2000))
