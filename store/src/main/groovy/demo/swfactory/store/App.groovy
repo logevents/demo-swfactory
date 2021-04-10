@@ -2,11 +2,15 @@ package demo.swfactory.store
 
 import demo.swfactory.model.BaseEntity
 import groovyx.net.http.ContentType
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spark.Request
 import spark.Response
 import spark.Spark
 
 class App {
+    private static Logger LOG = LoggerFactory.getLogger(App.class)
+
     static void main(String[] args) {
         ProducerClient<BaseEntity> client = new ProducerClient<>('localhost:9092', 'pusher', KafkaConsts.JSON_SE)
         client.init()
@@ -26,14 +30,24 @@ class App {
 
             //TODO: maybe some validation before processing
 
-            def feedback = feedbackChannel.register(msg)
+            LOG.info("Receive msg {}", msg.getClass().getName())
+
+            FeedbackChannel.Feedback feedback = feedbackChannel.register(msg)
             client.send('result-source', msg.trackingId, msg)
             feedback.waitUntilFinished()
 
             if (feedback.e) {
-                response.status(500)
-                return 'error'
+                LOG.info("Feedback error: {}",feedback)
+                if(feedback.e instanceof ValidationException){
+                    response.status(400)
+                    return 'ValidationError'
+                }else{
+                    response.status(500)
+                    return 'error'
+                }
+
             } else {
+                LOG.info("Feedback success {}",feedback)
                 return 'success'
             }
         })

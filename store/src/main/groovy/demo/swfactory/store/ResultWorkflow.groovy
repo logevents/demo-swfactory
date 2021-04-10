@@ -1,16 +1,25 @@
 package demo.swfactory.store
 
 import demo.swfactory.model.Build
+import demo.swfactory.model.BuildFinished
 import demo.swfactory.model.Fragment
 import demo.swfactory.model.Result
 import org.apache.kafka.streams.state.KeyValueStore
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class ResultWorkflow {
+    private static Logger LOG = LoggerFactory.getLogger(App.class)
+
     void process(Object msg, KeyValueStore<String, Fragment> importCache) {
         if (msg instanceof Build) {
             processBuild(msg, importCache)
         } else if (msg instanceof Result) {
             processResult(msg, importCache)
+        } else if (msg instanceof BuildFinished) {
+            processBuildFinished(msg, importCache)
+        } else {
+            LOG.error("invalid msg type {}", msg.getClass().getName())
         }
     }
 
@@ -21,7 +30,15 @@ class ResultWorkflow {
         resultCache.put(fragment.key(), fragment)
     }
 
+    void processBuildFinished(BuildFinished build, KeyValueStore<String, Fragment> resultCache) {
+        //TODO
+    }
+
+
     private void validateCreateBuild(KeyValueStore<String, Fragment> resultCache, Build build) {
+        if (build.project == "INVALID") {
+            throw new ValidationException("error during adding new build, build project name is invalid")
+        }
         def existingBuild = resultCache.get(build.key())
         if (existingBuild) {
             throw new ValidationException("error during adding new build, build with id ${build.trackingId} already exists")
