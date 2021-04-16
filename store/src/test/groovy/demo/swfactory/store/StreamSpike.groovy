@@ -1,5 +1,7 @@
 package demo.swfactory.store
 
+import demo.swfactory.common.KafkaConsts
+import demo.swfactory.common.ProducerClient
 import demo.swfactory.model.Build
 import demo.swfactory.model.BuildFinished
 import demo.swfactory.model.Result

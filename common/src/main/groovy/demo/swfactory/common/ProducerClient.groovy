@@ -1,4 +1,4 @@
-package demo.swfactory.store
+package demo.swfactory.common
 
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig

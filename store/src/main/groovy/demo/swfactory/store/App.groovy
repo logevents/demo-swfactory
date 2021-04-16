@@ -1,5 +1,7 @@
 package demo.swfactory.store
 
+import demo.swfactory.common.KafkaConsts
+import demo.swfactory.common.ProducerClient
 import demo.swfactory.model.BaseEntity
 import groovyx.net.http.ContentType
 import org.slf4j.Logger

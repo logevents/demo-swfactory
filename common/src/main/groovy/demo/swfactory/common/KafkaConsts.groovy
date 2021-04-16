@@ -1,12 +1,12 @@
-package demo.swfactory.store
+package demo.swfactory.common
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import demo.swfactory.common.JsonDeserializer
+import demo.swfactory.common.JsonSerializer
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.common.serialization.Serdes
-
-import java.text.SimpleDateFormat
 
 class KafkaConsts {
     static final JSON = createMapper()

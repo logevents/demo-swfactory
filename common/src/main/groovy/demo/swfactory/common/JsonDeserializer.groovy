@@ -1,4 +1,4 @@
-package demo.swfactory.store
+package demo.swfactory.common
 
 import org.apache.kafka.common.serialization.Deserializer
 
