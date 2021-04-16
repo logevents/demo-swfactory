@@ -1,6 +1,9 @@
 package demo.swfactory.model
 
-class BaseEntity {
+abstract class BaseEntity {
     String trackingId
     String requestId
+
+    abstract String key()
+    abstract String label()
 }

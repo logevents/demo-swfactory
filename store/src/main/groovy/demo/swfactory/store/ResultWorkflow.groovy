@@ -26,14 +26,26 @@ class ResultWorkflow {
     void processBuild(Build build, KeyValueStore<String, Fragment> resultCache) {
         validateCreateBuild(resultCache, build)
 
-        def fragment = new Fragment(build: build, resultKeys: [])
+        def fragment = new Fragment(build: build, resultKeys: [], state: Build.State.STARTED)
         resultCache.put(fragment.key(), fragment)
     }
 
-    void processBuildFinished(BuildFinished build, KeyValueStore<String, Fragment> resultCache) {
-        //TODO
+    void processBuildFinished(BuildFinished buildFinished, KeyValueStore<String, Fragment> resultCache) {
+        validateBuildExists(buildFinished.trackingId, resultCache)
+        def fragment = resultCache.get(buildFinished.key())
+
+        fragment.state = Build.State.FINISHED
+
+        resultCache.put(fragment.key(), fragment)
     }
 
+    void validateBuildExists(String trackingId, KeyValueStore<String, Fragment> resultCache) {
+        def fragment = resultCache.get(trackingId)
+
+        if (!fragment) {
+            throw new ValidationException("no build for trackingId $trackingId")
+        }
+    }
 
     private void validateCreateBuild(KeyValueStore<String, Fragment> resultCache, Build build) {
         if (build.project == "INVALID") {

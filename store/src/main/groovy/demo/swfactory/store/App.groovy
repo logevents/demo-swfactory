@@ -18,8 +18,7 @@ class App {
         def resultWorkflow = new ResultWorkflow()
         def feedbackChannel = new FeedbackChannel()
         def storeStream = new StoreStream(resultWorkflow, feedbackChannel,
-                'localhost:9092', 'store1',
-                'latest', 'result-source')
+                'localhost:9092', 'store1', 'result-source')
 
         storeStream.start()
 
@@ -30,24 +29,24 @@ class App {
 
             //TODO: maybe some validation before processing
 
-            LOG.info("Receive msg {}", msg.getClass().getName())
+            LOG.info("received msg {}", msg.label())
 
             FeedbackChannel.Feedback feedback = feedbackChannel.register(msg)
             client.send('result-source', msg.trackingId, msg)
             feedback.waitUntilFinished()
 
             if (feedback.e) {
-                LOG.info("Feedback error: {}",feedback)
-                if(feedback.e instanceof ValidationException){
+                LOG.info("import error: {}", msg.label(), feedback.e)
+                if (feedback.e instanceof ValidationException) {
                     response.status(400)
-                    return 'ValidationError'
-                }else{
+                    return 'validation error: ' + feedback.e.message
+                } else {
                     response.status(500)
-                    return 'error'
+                    return 'unknown error: ' + feedback.e.message
                 }
 
             } else {
-                LOG.info("Feedback success {}",feedback)
+                LOG.info("import successful {}", msg.label())
                 return 'success'
             }
         })

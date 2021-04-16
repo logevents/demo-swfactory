@@ -51,9 +51,9 @@ class StoreStream extends StreamsRunner {
 
     StoreStream(ResultWorkflow resultWorkflow,
                 FeedbackChannel feedbackChannel,
-                String servers, String appId, String autoOffset,
+                String servers, String appId,
                 String resultSourceTopic) {
-        super(servers, appId, autoOffset)
+        super(servers, appId)
         this.feedbackChannel = feedbackChannel
         this.resultWorkflow = resultWorkflow
         this.resultSourceTopic = resultSourceTopic

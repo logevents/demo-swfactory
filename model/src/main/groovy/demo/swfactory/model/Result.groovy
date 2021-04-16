@@ -17,6 +17,11 @@ class Result extends BaseEntity {
     }
 
     @Override
+    String label() {
+        return "result-${key()}"
+    }
+
+    @Override
     String toString() {
         return "Result{" +
                 "_type='" + _type + '\'' +
@@ -28,5 +33,4 @@ class Result extends BaseEntity {
                 ", properties=" + properties +
                 '}';
     }
-
 }

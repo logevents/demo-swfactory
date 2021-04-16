@@ -1,9 +1,11 @@
 package demo.swfactory.store
 
 import demo.swfactory.model.Build
+import demo.swfactory.model.BuildFinished
 import demo.swfactory.model.Result
 import demo.swfactory.pusher.generation.ResultGeneration
 import groovyx.net.http.ContentType
+import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
 import spock.lang.Specification
 
@@ -52,12 +54,20 @@ class StreamSpike extends Specification {
             send(client, it)
         }
 
+        def finished = new BuildFinished()
+        finished.trackingId = build.trackingId
+        send(client, finished)
+
         expect: true
     }
 
     private void send(RESTClient client, Object msg) {
-        def response = client.post(body: KafkaConsts.JSON.writeValueAsString(msg), requestContentType: ContentType.TEXT)
-        println response.data.text
+        try {
+            def response = client.post(body: KafkaConsts.JSON.writeValueAsString(msg), requestContentType: ContentType.TEXT)
+            println response.data.text
+        } catch (HttpResponseException e) {
+            println "status ${e.response.status} ${e.response.data.text}"
+        }
     }
 
     def 'send some json to topic'() {
@@ -96,7 +106,7 @@ class StreamSpike extends Specification {
 
         def storeStream = new StoreStream(resultWorkflow, feedbackChannel,
                 'localhost:9092', 'store1',
-                'latest', 'result-source')
+                'result-source')
 
         storeStream.start()
 

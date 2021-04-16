@@ -2,6 +2,7 @@ package demo.swfactory.model
 
 class Fragment {
     Build build
+    Build.State state
     Result result
     Set<String> resultKeys
 

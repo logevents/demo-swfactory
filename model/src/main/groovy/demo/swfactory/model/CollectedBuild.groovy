@@ -11,7 +11,7 @@ class CollectedBuild {
 
 
     @Override
-    public String toString() {
+    String toString() {
         return "CollectedBuild{" +
                 "_type='" + _type + '\'' +
                 ", trackingId='" + trackingId + '\'' +
