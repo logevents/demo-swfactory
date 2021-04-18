@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'swfactory'
-include('pusher', 'model', 'common', 'store')
+include('pusher', 'model', 'common', 'store', 'collector')

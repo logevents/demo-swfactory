@@ -1,0 +1,23 @@
+plugins {
+    // Apply the groovy plugin to add support for Groovy
+    id 'groovy'
+    id 'idea'
+}
+
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.15'
+    compile "com.sparkjava:spark-core:2.9.3"
+    compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7"
+
+
+    compile project(':common')
+    compile project(':model')
+
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    jcenter()
+}
