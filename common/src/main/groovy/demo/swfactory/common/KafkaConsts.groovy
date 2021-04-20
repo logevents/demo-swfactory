@@ -10,6 +10,7 @@ import org.apache.kafka.common.serialization.Serdes
 
 class KafkaConsts {
     static final JSON = createMapper()
+    static final JSON_PRETTY = createPrettyMapper()
 
     private static ObjectMapper createMapper() {
         def mapper = new ObjectMapper()
@@ -19,6 +20,13 @@ class KafkaConsts {
 
         mapper
     }
+
+    private static ObjectMapper createPrettyMapper() {
+        def mapper = createMapper()
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true)
+        return mapper
+    }
+
     static final JSON_SE = new JsonSerializer()
 
     static <T> Serde<T> createJsonSerde(Class<T> c) {

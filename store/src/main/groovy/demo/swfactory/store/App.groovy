@@ -22,6 +22,7 @@ class App {
         def storeStream = new StoreStream(resultWorkflow, feedbackChannel,
                 'localhost:9092', 'store1', 'result-source')
 
+        storeStream.init()
         storeStream.start()
 
         Spark.port(8080)
