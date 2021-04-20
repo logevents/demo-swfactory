@@ -1,11 +1,17 @@
 package demo.swfactory.collector
 
+import demo.swfactory.model.Build
+import demo.swfactory.model.BuildFinished
 import demo.swfactory.model.CollectedBuild
 import demo.swfactory.model.Fragment
 import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.state.KeyValueStore
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import java.util.stream.Collectors
+
+import static demo.swfactory.model.Build.State.*
 
 class CollectorService {
     private static Logger LOG = LoggerFactory.getLogger(CollectorService.class)
@@ -15,11 +21,16 @@ class CollectorService {
         Fragment updated = getUpdated(store)
         def updatedBuilds = updated.updated
 
-        updatedBuilds.stream()
-        .map{trackingId -> collectBuild(store, trackingId)}
-
-
         LOG.info("Having {} builds updated", updatedBuilds.size())
+
+
+        updatedBuilds.stream()
+                .map { trackingId -> collectBuild(store, trackingId) }
+                .peek { LOG.info("collected {} and forward it now", it.trackingId) }
+                .forEach { processorContext.forward(it.trackingId, it) }
+
+        updated.updated = [].toSet()
+        store.put("updated", updated)
     }
 
     void putFragment(KeyValueStore<String, Fragment> store, String key, Fragment fragment) {
@@ -49,11 +60,33 @@ class CollectorService {
     }
 
     CollectedBuild collectBuild(KeyValueStore<String, Fragment> store, String trackingId) {
-//        def collectedBuild = new CollectedBuild()
-//collectedBuild. = store.get(trackingId)
-//
-//        def results = build.getResultKeys()
+        Fragment buildFragment = store.get(trackingId)
 
 
+        //TODO how to get buildFinished??
+        CollectedBuild collectedBuild = createFromBuilds(buildFragment.build, null)
+
+        collectedBuild.results = buildFragment.getResultKeys()
+                .stream()
+                .map { k -> store.get(k).result }
+                .collect(Collectors.toSet())
+
+        return collectedBuild
+    }
+
+    CollectedBuild createFromBuilds(Build started, BuildFinished finished) {
+        def collectedBuild = new CollectedBuild()
+
+        collectedBuild.trackingId = started.trackingId
+        collectedBuild.project = started.project
+        collectedBuild.started = started.started
+
+        if (finished == null) {
+            collectedBuild.state = STARTED
+        } else {
+            collectedBuild.state = FINISHED
+            collectedBuild.finished = finished.finished
+        }
+        return collectedBuild
     }
 }
