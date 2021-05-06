@@ -43,22 +43,26 @@ class StreamSpike extends Specification {
         def client = new RESTClient('http://localhost:8080/import')
 
         def trackingId = UUID.randomUUID().toString()
+        println "trackingId: $trackingId"
 
         Build build = new Build(requestId: UUID.randomUUID().toString(),
                 trackingId: trackingId, started: new Date())
 
         send(client, build)
+        println KafkaConsts.JSON_PRETTY.writeValueAsString(build)
 
 
         Set<Result> results = ResultGeneration.generateResults(trackingId, 10)
         results.each {
             it.requestId = UUID.randomUUID().toString()
             send(client, it)
+            println KafkaConsts.JSON_PRETTY.writeValueAsString(it)
         }
 
         def finished = new BuildFinished()
         finished.trackingId = build.trackingId
         send(client, finished)
+        println KafkaConsts.JSON_PRETTY.writeValueAsString(finished)
 
         expect: true
     }

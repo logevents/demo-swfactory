@@ -2,6 +2,7 @@ package demo.swfactory.collector
 
 import demo.swfactory.common.StreamsRunner
 import demo.swfactory.model.Fragment
+import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import org.slf4j.Logger
@@ -37,6 +38,5 @@ class CollectorStateQuery {
                 .collect { it.get(key) }
                 .find { it }
     }
-
 
 }

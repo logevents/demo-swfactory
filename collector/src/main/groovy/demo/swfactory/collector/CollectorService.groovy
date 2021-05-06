@@ -27,7 +27,9 @@ class CollectorService {
         updatedBuilds.stream()
                 .map { trackingId -> collectBuild(store, trackingId) }
                 .peek { LOG.info("collected {} and forward it now", it.trackingId) }
-                .forEach { processorContext.forward(it.trackingId, it) }
+                .forEach {
+                    processorContext.forward(it.trackingId, it)
+                }
 
         updated.updated = [].toSet()
         store.put("updated", updated)

@@ -19,7 +19,7 @@ class CollectorApp {
 
         CollectorService collectorService = new CollectorService()
         def storeStream = new CollectorStream('localhost:9092', 'collector1',
-                'collector-flights-cache', 'store1-result-cache-changelog', 'collector-collected-builds', 5, collectorService)
+                'collector-flights-cache', 'store1-result-cache-changelog', 'builds', 5, collectorService)
         CollectorStateQuery query = new CollectorStateQuery('collector-flights-cache', storeStream)
         storeStream.init()
         query.init()
